@@ -1,5 +1,6 @@
 package com.app.products.config;
 
+import com.app.products.service.ProductCreateEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,12 +76,12 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public ProducerFactory<String, ProductCreateEvent> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public KafkaTemplate<String, ProductCreateEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
