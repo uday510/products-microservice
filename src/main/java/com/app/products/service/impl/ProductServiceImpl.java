@@ -1,7 +1,7 @@
 package com.app.products.service.impl;
 
+import com.app.core.ProductCreateEvent;
 import com.app.products.rest.CreateProductRestModel;
-import com.app.products.service.ProductCreateEvent;
 import com.app.products.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
