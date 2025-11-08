@@ -82,7 +82,7 @@
 
 # 8️⃣ Consume with keys and values
 ./bin/kafka-console-consumer.sh \
-  --topic topic2 \
+  --topic product-created-events-topic \
   --from-beginning \
   --bootstrap-server localhost:9092 \
   --property print.key=true \
