@@ -24,10 +24,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String createProduct(CreateProductRestModel product) throws ExecutionException, InterruptedException {
+    public String createProduct(CreateProductRestModel product) {
         String productId = UUID.randomUUID().toString();
-
-        // TODO: Persist Product details into DB before publishing an Event.
 
         ProductCreateEvent productCreateEvent = new ProductCreateEvent(
                 product.getTitle(),
@@ -36,11 +34,24 @@ public class ProductServiceImpl implements ProductService {
                 productId
         );
 
-        SendResult<String, ProductCreateEvent> result = kafkaTemplate.send("product-created-events-topic", productId, productCreateEvent).get();
+        try {
+            SendResult<String, ProductCreateEvent> result = kafkaTemplate
+                    .send("product-created-events-topic", productId, productCreateEvent)
+                    .get();
 
-        LOGGER.info("Partition: {}", result.getRecordMetadata().partition());
-        LOGGER.info("Topic: {}", result.getRecordMetadata());
+            LOGGER.info(
+                    "Sent event for Product ID: {} to topic '{}' partition {} @ offset {}",
+                    productId,
+                    result.getRecordMetadata().topic(),
+                    result.getRecordMetadata().partition(),
+                    result.getRecordMetadata().offset()
+            );
 
-        return productId;
+            return productId;
+        } catch (InterruptedException | ExecutionException e) {
+            Thread.currentThread().interrupt();
+            LOGGER.error("Failed to send product creation event for {}: {}", productId, e.getMessage(), e);
+            throw new RuntimeException("Failed to send Kafka message", e);
+        }
     }
 }
