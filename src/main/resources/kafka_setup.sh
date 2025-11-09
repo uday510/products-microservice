@@ -13,7 +13,7 @@
 
 # 2️⃣ Format storage directory with the generated cluster ID
 ./bin/kafka-storage.sh format \
-  -t 4lvPpu_3SWyvu24gRaIT8g \
+  -t m7vdzZurSBWfMPWDMezWCg \
   -c config/kraft/server.properties
 
 # 3️⃣ Start Kafka server (in KRaft mode)
@@ -61,7 +61,7 @@
 # 6️⃣ Producer with keys (key=value format)
 ./bin/kafka-console-producer.sh \
   --bootstrap-server localhost:9092 \
-  --topic topic2 \
+  --topic product-created-events-topic \
   --property "parse.key=true" \
   --property "key.separator=:"
 
